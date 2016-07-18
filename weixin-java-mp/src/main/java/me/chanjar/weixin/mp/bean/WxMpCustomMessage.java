@@ -44,7 +44,7 @@ public class WxMpCustomMessage implements Serializable {
    * {@link me.chanjar.weixin.common.api.WxConsts#CUSTOM_MSG_MUSIC}
    * {@link me.chanjar.weixin.common.api.WxConsts#CUSTOM_MSG_VIDEO}
    * {@link me.chanjar.weixin.common.api.WxConsts#CUSTOM_MSG_NEWS}
-   * </pre>
+   * </pre> test
    * @param msgType
    */
   public void setMsgType(String msgType) {

@@ -40,6 +40,7 @@ public class WxMpInMemoryConfigStorage implements WxMpConfigStorage {
   protected volatile SSLContext sslContext;
   
   public String getAccessToken() {
+    System.out.println("accessToken:" + accessToken);
     return this.accessToken;
   }
 

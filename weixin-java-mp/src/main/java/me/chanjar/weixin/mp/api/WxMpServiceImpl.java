@@ -38,17 +38,7 @@ import me.chanjar.weixin.common.util.http.Utf8ResponseHandler;
 import me.chanjar.weixin.common.util.json.GsonHelper;
 import me.chanjar.weixin.common.util.json.WxGsonBuilder;
 import me.chanjar.weixin.common.util.xml.XStreamInitializer;
-import me.chanjar.weixin.mp.bean.WxMpCustomMessage;
-import me.chanjar.weixin.mp.bean.WxMpGroup;
-import me.chanjar.weixin.mp.bean.WxMpMassGroupMessage;
-import me.chanjar.weixin.mp.bean.WxMpMassNews;
-import me.chanjar.weixin.mp.bean.WxMpMassOpenIdsMessage;
-import me.chanjar.weixin.mp.bean.WxMpMassVideo;
-import me.chanjar.weixin.mp.bean.WxMpMaterial;
-import me.chanjar.weixin.mp.bean.WxMpMaterialArticleUpdate;
-import me.chanjar.weixin.mp.bean.WxMpMaterialNews;
-import me.chanjar.weixin.mp.bean.WxMpSemanticQuery;
-import me.chanjar.weixin.mp.bean.WxMpTemplateMessage;
+import me.chanjar.weixin.mp.bean.*;
 import me.chanjar.weixin.mp.bean.result.WxMpMassSendResult;
 import me.chanjar.weixin.mp.bean.result.WxMpMassUploadResult;
 import me.chanjar.weixin.mp.bean.result.WxMpMaterialCountResult;
@@ -424,8 +414,8 @@ public class WxMpServiceImpl implements WxMpService {
      */
     JsonElement tmpJsonElement = Streams.parse(new JsonReader(new StringReader(responseContent)));
     return WxMpGsonBuilder.INSTANCE.create().fromJson(tmpJsonElement.getAsJsonObject().get("groups"),
-        new TypeToken<List<WxMpGroup>>() {
-        }.getType());
+            new TypeToken<List<WxMpGroup>>() {
+            }.getType());
   }
 
   public long userGetGroup(String openid) throws WxErrorException {
@@ -484,6 +474,7 @@ public class WxMpServiceImpl implements WxMpService {
     actionInfo.add("scene", scene);
     json.add("action_info", actionInfo);
     String responseContent = execute(new SimplePostRequestExecutor(), url, json.toString());
+    System.out.println("生成二维码的Str=========" + responseContent);
     return WxMpQrCodeTicket.fromJson(responseContent);
   }
 
@@ -496,7 +487,11 @@ public class WxMpServiceImpl implements WxMpService {
     scene.addProperty("scene_id", scene_id);
     actionInfo.add("scene", scene);
     json.add("action_info", actionInfo);
+    JsonObject scanCodeInfo = new JsonObject();
+    scanCodeInfo.addProperty("ScanResult", String.valueOf(scene_id));
+    json.add("ScanCodeInfo", scanCodeInfo);
     String responseContent = execute(new SimplePostRequestExecutor(), url, json.toString());
+    System.out.println("生成二维码的Str1=========" + responseContent);
     return WxMpQrCodeTicket.fromJson(responseContent);
   }
 
@@ -508,8 +503,12 @@ public class WxMpServiceImpl implements WxMpService {
     JsonObject scene = new JsonObject();
     scene.addProperty("scene_str", scene_str);
     actionInfo.add("scene", scene);
+    JsonObject scanCodeInfo = new JsonObject();
+    scanCodeInfo.addProperty("ScanResult", scene_str);
+    json.add("ScanCodeInfo", scanCodeInfo);
     json.add("action_info", actionInfo);
     String responseContent = execute(new SimplePostRequestExecutor(), url, json.toString());
+    System.out.println("生成二维码的Str2=========" + responseContent);
     return WxMpQrCodeTicket.fromJson(responseContent);
   }
 
@@ -623,6 +622,18 @@ public class WxMpServiceImpl implements WxMpService {
   }
 
   @Override
+  public void redirectUrl(String url) {
+    RequestExecutor<String, String> executor = new SimpleGetRequestExecutor();
+    try {
+      executor.execute(getHttpclient(), httpProxy, url, null);
+    } catch (WxErrorException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
   public boolean oauth2validateAccessToken(WxMpOAuth2AccessToken oAuth2AccessToken) {
     String url = "https://api.weixin.qq.com/sns/auth?";
     url += "access_token=" + oAuth2AccessToken.getAccessToken();
@@ -730,7 +741,6 @@ public class WxMpServiceImpl implements WxMpService {
       throw new IllegalArgumentException("uri参数中不允许有access_token: " + uri);
     }
     String accessToken = getAccessToken(false);
-
     String uriWithAccessToken = uri;
     uriWithAccessToken += uri.indexOf('?') == -1 ? "?access_token=" + accessToken : "&access_token=" + accessToken;
 

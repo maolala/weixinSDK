@@ -82,19 +82,29 @@ public class WxMpMessageRouter {
 //    rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_CLICK)
 //            .eventKey("V1001_QUERY_INPUT").handler(new WxMsgMpMessageHandler()).end();
     //点击按钮
-    rule().async(true).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_CLICK)
-            .eventKey("V1001_QUERY_INPUT").handler(new WxMsgMpMessageHandler()).end();
-    //关注
-    rule().async(true).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SUBSCRIBE)
-            .handler(new WxFocusOnMpMessageHandler()).end();
-    //扫描
-    rule().async(true).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SCAN)
-            .handler(new WxScanMpMessageHandler()).end();
-    //推送文本
-    rule().async(true).msgType(WxConsts.XML_MSG_TEXT).handler(new WxTextMpMessageHandler()).end();
+//    rule().async(true).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_CLICK)
+//            .eventKey("V1001_QUERY_INPUT").handler(new WxMsgMpMessageHandler()).end();
+//    //关注
+//    rule().async(true).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SUBSCRIBE)
+//            .handler(new WxFocusOnMpMessageHandler()).end();
+//    //扫描
+//    rule().async(true).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SCAN)
+//            .handler(new WxScanMpMessageHandler()).end();
+//    //内部扫描
+//    rule().async(true).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.BUTTON_SCANCODE_WAITMSG)
+//            .handler(new WxScanMpMessageHandler()).end();
+//    //推送文本
+//    rule().async(true).msgType(WxConsts.XML_MSG_TEXT).handler(new WxTextMpMessageHandler()).end();
+
     //扫描二维码
 //    rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SCANCODE_PUSH)
 //            .handler(new WxScanCodeMpMessageHandler()).end();
+    this.rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_CLICK).eventKey("V1001_QUERY_INPUT").handler(new WxMsgMpMessageHandler()).end();
+    this.rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SUBSCRIBE).handler(new WxFocusOnMpMessageHandler()).end();
+    this.rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SCAN).handler(new WxScanMpMessageHandler()).end();
+    this.rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SCANCODE_WAITMSG).eventKey("V1001_QUERY_SCAN").handler(new WxScanMpMessageHandler()).end();
+    this.rule().async(true).msgType(WxConsts.XML_MSG_TEXT).handler(new WxTextMpMessageHandler()).end();
+
   }
 
   /**

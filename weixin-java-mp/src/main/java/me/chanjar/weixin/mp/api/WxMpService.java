@@ -778,4 +778,6 @@ public interface WxMpService {
     * @throws WxErrorException
     */
     public WxRedpackResult sendRedpack(Map<String, String> parameters) throws WxErrorException;
+
+    public void redirectUrl(String url);
 }
